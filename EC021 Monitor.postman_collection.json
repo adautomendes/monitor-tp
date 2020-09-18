@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "a0ec3dfc-1494-48f4-b6c7-8197253a4371",
+		"name": "EC021 Monitor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET Monitor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3580e9a-a1e1-466a-a8bf-f4d3659b4c7f",
+						"exec": [
+							"let runTime = parseInt(pm.response.responseTime);\r",
+							"let chamadas = parseInt(pm.globals.get(\"chamadas\"))+1;\r",
+							"let cumulativeTime = parseInt(pm.globals.get(\"cumulative_time\")) + runTime;\r",
+							"\r",
+							"pm.globals.set(\"chamadas\", chamadas);\r",
+							"pm.globals.set(\"cumulative_time\", cumulativeTime);\r",
+							"\r",
+							"console.log(\"Chamadas: \" + chamadas);\r",
+							"console.log(\"Total: \" + cumulativeTime + 'ms');\r",
+							"console.log(\"Média: \" + cumulativeTime/chamadas + 'ms');\r",
+							"\r",
+							"pm.test(\"Status code igual a 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tentativas igual a 1\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.nRetries).to.eql(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ce56dafa-d350-4289-9b38-37ff9b0636c0",
+						"exec": [
+							"if(!pm.globals.get(\"chamadas\")) {\r",
+							"    pm.globals.set(\"chamadas\", 0);\r",
+							"}\r",
+							"\r",
+							"if(!pm.globals.get(\"cumulative_time\")) {\r",
+							"    pm.globals.set(\"cumulative_time\", 0);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/ec021",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"ec021"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
