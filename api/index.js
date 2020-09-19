@@ -18,15 +18,15 @@ server.get('/ec021', async (req, res) => {
         let url = SERVERS[_.random(SERVERS.length - 1)] + `/ec021`;
 
         if (i == 1) {
-            console.log(`Enviando request para o server: ${url}`);
+            console.log(`[${i}] - Enviando request para o server: ${url}`);
         } else {
-            console.log(`Reenviando request para o server: ${url}`);
+            console.log(`[${i}] - Reenviando request para o server: ${url}`);
         }
 
         let axiosRes;
         await axios.get(url, config)
             .then((response) => {
-                console.log(`Sucesso em ${url}`);
+                console.log(`[${i}] - Sucesso em ${url}`);
                 axiosRes = response;
             })
             .catch(function (error) {
