@@ -1,5 +1,5 @@
 # Exemplo de Monitor TP
-Exemplo didático de orquestração entre API e Core.
+Exemplo didático de orquestração entre API e Core. Teste
 
 ## Como funciona?
 - Execute a aplicação `core` em várias instâncias (Docker recomendado) nas portas 5000, 5001, 5002 e 5003.
