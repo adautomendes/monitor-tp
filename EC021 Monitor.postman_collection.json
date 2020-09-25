@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a0ec3dfc-1494-48f4-b6c7-8197253a4371",
+		"_postman_id": "10bbe338-98e5-4e8d-bb6e-305a94d7ee49",
 		"name": "EC021 Monitor",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e3580e9a-a1e1-466a-a8bf-f4d3659b4c7f",
+						"id": "5b8e572b-73af-4109-bec7-debce860ef1d",
 						"exec": [
 							"let runTime = parseInt(pm.response.responseTime);\r",
 							"let chamadas = parseInt(pm.globals.get(\"chamadas\"))+1;\r",
@@ -39,7 +39,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "ce56dafa-d350-4289-9b38-37ff9b0636c0",
+						"id": "3a69134a-74b2-4393-9224-90f078dadbf5",
 						"exec": [
 							"if(!pm.globals.get(\"chamadas\")) {\r",
 							"    pm.globals.set(\"chamadas\", 0);\r",
@@ -65,6 +65,141 @@
 					"port": "3000",
 					"path": [
 						"ec021"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Core",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/ec021",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ec021"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar Sobrecarga no Core 1",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sobrecarga\": \"random\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/ec021/sobrecarga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ec021",
+						"sobrecarga"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar Sobrecarga no Core 2",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sobrecarga\": \"random\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/ec021/sobrecarga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"ec021",
+						"sobrecarga"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar Sobrecarga no Core 3",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sobrecarga\": \"random\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5002/ec021/sobrecarga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5002",
+					"path": [
+						"ec021",
+						"sobrecarga"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar Sobrecarga no Core 4",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sobrecarga\": \"random\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5003/ec021/sobrecarga",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"ec021",
+						"sobrecarga"
 					]
 				}
 			},

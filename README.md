@@ -29,6 +29,26 @@ npm start
 ```
 
 ## Informações úteis
-- Cada instância tem uma probabilidade de estar sobrecarregada de 50% (isto pode ser alterado mudando o valor da constante `PROB_SOBRECARGA` no `index.js` do `core`).
-- Caso queira modificar as instâncias conhecidas pela API, altere o array `SERVERS` no `index.js` na `api`. A API está configurada para escolher um `core` aleatoriamente entre as instâncias conhecidas (registradas neste array).
-- A quantidade de retentativas está configurada para 5, caso queira alterar modifique o valor da constante `RETRIES` no `index.js` na `api`.
+- Cada instância tem uma probabilidade de estar sobrecarregada de 50% inicialmente (isto pode ser alterado via REST utilizando a request abaixo):
+```shell
+PATCH http://<core_server_host>:<core_server_port>/ec021/sobrecarga
+```
+
+```json
+{
+    "sobrecarga": "50"
+}
+```
+Onde o valor de sobrecarga deve ser entre 0 a 100. Caso queira uma sobrecarga aleatória, use o payload abaixo:
+```json
+{
+    "sobrecarga": "random"
+}
+```
+
+- Caso queira modificar as instâncias conhecidas pela API, altere o arquivo `.env` na propriedade `CORE_SERVERS` separando os servidores conhecidos por `;`. Exemplo:
+```properties
+CORE_SERVERS=localhost:5000;localhost:5001;localhost:5002;localhost:5003
+```
+- A API está configurada para escolher um `core` aleatoriamente entre as instâncias conhecidas (registradas neste array `CORE_SERVERS`).
+- A quantidade de retentativas está configurada para 5, caso queira alterar modifique o valor da constante `RETRIES` no `.env` na `api`.

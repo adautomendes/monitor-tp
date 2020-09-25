@@ -2,9 +2,24 @@ const restify = require('restify');
 const server = restify.createServer();
 const axios = require('axios').default;
 const _ = require("lodash");
+require('dotenv').config();
 
-const SERVERS = ['http://localhost:5000', 'http://localhost:5001', 'http://localhost:5002', 'http://localhost:5003'];
-const RETRIES = 5;
+const SERVERS = [];
+const RETRIES = process.env.RETRIES;
+
+//Middleware usado para registrar os servidores conhecidos
+server.use((req, res, next) => {
+    const serverList = process.env.CORE_SERVERS.split(';');
+
+    serverList.forEach(server => {
+        SERVERS.push({
+            location: `http://${server}`,
+            isOk: true
+        });
+    });
+
+    next();
+});
 
 server.get('/ec021', async (req, res) => {
     let config = {
@@ -15,7 +30,40 @@ server.get('/ec021', async (req, res) => {
     let errorResponses = [];
     for (let i = 1; i <= RETRIES; i++) {
         let timeStamp = new Date();
-        let url = SERVERS[_.random(SERVERS.length - 1)] + `/ec021`;
+
+        // Checking if the request exausts attempts in all CORE Servers
+        let trueFound = false;
+
+        for (let j = 0; j < SERVERS.length; j++) {
+            if (SERVERS[j].isOk) {
+                trueFound = true;
+                break;
+            }
+        }
+
+        if (!trueFound) {
+            return res.json(503, {
+                status: `Error`,
+                tryNo: i,
+                response: `No CORE server available.`,
+                successTime: timeStamp,
+                errorResponses
+            });
+        }
+
+        //Getting next available server
+        let pos;
+        let serverFound = false;
+        while (!serverFound) {
+            pos = _.random(SERVERS.length - 1);
+            let server = SERVERS[pos];
+
+            if (server.isOk) {
+                serverFound = true;
+            }
+        }
+
+        let url = SERVERS[pos].location + `/ec021`;
 
         if (i == 1) {
             console.log(`[${i}] - Enviando request para o server: ${url}`);
@@ -51,7 +99,7 @@ server.get('/ec021', async (req, res) => {
                 }
             });
 
-        if (axiosRes && axiosRes.status == 200) { //Sucesso
+        if (axiosRes && axiosRes.status == 200) { // Success
             return res.json(200, {
                 status: `OK`,
                 tryNo: i,
@@ -60,6 +108,7 @@ server.get('/ec021', async (req, res) => {
                 errorResponses
             });
         } else {
+            SERVERS[pos].isOk = false; // If request fails, flags this server as not ok
             errorResponses.push(axiosRes);
         }
     }
